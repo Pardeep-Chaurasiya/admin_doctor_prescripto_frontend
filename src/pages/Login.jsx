@@ -2,30 +2,29 @@ import React, { useContext, useState } from 'react'
 import {assets} from "../assets/assets"
 import { AdminContext } from '../context/AdminContext'
 import axios from "axios"
-import { toast } from 'react-toastify'
+import { ToastContainer,toast } from 'react-toastify'
 
 const Login = () => {
     const [state,setState] = useState('Admin')
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
 
-    const {setAToken,backendUrl} = useContext(AdminContext)
+    const {setToken,backendUrl} = useContext(AdminContext)
 
     const onSubmitHandler = async(event)=>{
         event.preventDefault()
-
         try {
             if(state === 'Admin'){
                 // backend admin login api call
                 const {data} = await axios.post(backendUrl + '/api/admin/login',{email,password})
                 if(data.success){
                     // set localstorage token
-                    localStorage.setItem('aToken',data.token)
-                    setAToken(data.token)
+                    localStorage.setItem('token',data.token)
+                    setToken(data.token)
                     toast.success("Login Successfully !!")
+                }else{
+                    toast.error(data.message || 'Login Failed !!')
                 }
-            }else{
-                toast.error(data.message || 'Login Failed !!')
             }
         } catch (error) {
             console.log(error)
@@ -33,6 +32,7 @@ const Login = () => {
     }
   return (
     <form onSubmit={onSubmitHandler} className='min-h-[80vh] flex items-center'>
+        <ToastContainer />
         <div className='flex flex-col gap-3 m-auto items-start p-8 min-w-[340px] sm:min-w-96 border rounded-xl text-[#5E5E5E] text-sm shadow-lg'>
             <p className='text-2xl font-semibold m-auto'><span className='text-primary'>{state}</span> Login</p>
             <div className='w-full'>

@@ -13,9 +13,9 @@ import Dashboard from './pages/Admin/Dashboard';
 
 const App = () => {
 
-  const {aToken} = useContext(AdminContext)
+  const {token} = useContext(AdminContext)
 
-  return aToken?(
+  return token?(
     <div className='bg-[#F8F9FD]'>
       <ToastContainer/>
       <Navbar/>
